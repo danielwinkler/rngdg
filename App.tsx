@@ -11,11 +11,11 @@
 import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
-  View,
   Text,
   ListRenderItemInfo,
   TextInput,
   FlatList,
+  TouchableOpacity,
 } from 'react-native';
 
 interface ITypeAHead {
@@ -24,11 +24,18 @@ interface ITypeAHead {
 
 const Header = () => <Text>Suggestions:</Text>;
 
-const renderListItem = ({ item, index }: ListRenderItemInfo<ITypeAHead>) => (
-  <View style={styles.listItem} key={item.suggestion + index}>
-    <Text>{item.suggestion}</Text>
-  </View>
-);
+
+const renderListItem = (select: (search: string) => void) => ({
+  item,
+  index,
+}: ListRenderItemInfo<ITypeAHead>) => (
+    <TouchableOpacity
+      onPress={() => select(item.suggestion)}
+      style={styles.listItem}
+      key={item.suggestion + index}>
+      <Text>{item.suggestion}</Text>
+    </TouchableOpacity>
+  );
 
 const getTypeAhead = async (query: string): Promise<ITypeAHead[]> => {
   const raw = await fetch(`https://api.datamuse.com/sug?s=${query}`);
@@ -53,7 +60,7 @@ const App = () => {
       <FlatList
         ListHeaderComponent={<Header />}
         data={results}
-        renderItem={renderListItem}
+        renderItem={renderListItem(setSearch)}
         keyboardShouldPersistTaps={'handled'}
       />
     </>

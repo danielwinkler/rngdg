@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { ImageURISource } from 'react-native';
 
 /// TYPES
-interface IState {
+export interface IState {
   query: string;
   images: Array<ImageURISource>;
 }
@@ -19,15 +19,15 @@ export enum ActionTypes {
   SET_IMAGES = 'SET_IMAGES',
 }
 
-interface SetQueryAction {
+export interface SetQueryAction {
   type: typeof ActionTypes.SET_QUERY;
   payload: { query: string };
 }
-interface SetImagesAction {
+export interface SetImagesAction {
   type: typeof ActionTypes.SET_IMAGES;
   payload: { images: Array<ImageURISource> };
 }
-type Actions = SetQueryAction | SetImagesAction;
+export type Actions = SetQueryAction | SetImagesAction;
 
 /// REDUCER
 const reducer: Reducer<IState, Actions> = (state = defaultState, action) => {

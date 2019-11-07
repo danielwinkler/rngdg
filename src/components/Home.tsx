@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   FlatList,
@@ -6,22 +6,15 @@ import {
   ListRenderItemInfo,
   TextInput,
   TouchableOpacity,
-  View,
-  Button,
 } from 'react-native';
 import { IState, ActionTypes, Actions } from '../store/store';
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
+import HGifPane from './HGifPane';
 
 interface ITypeAHead {
   suggestion: string;
 }
-
-const renderGif = ({ item, index }: ListRenderItemInfo<string>) => (
-  <View key={index}>
-    <Text>{item}</Text>
-  </View>
-);
 
 const renderListItem = (select: (search: string) => void) => ({
   item,
@@ -42,7 +35,8 @@ const getSuggestions = async (query: string): Promise<ITypeAHead[]> => {
 };
 
 interface PropsFromState {
-  gifs: string[];
+  showGifs: boolean;
+  terms: Array<string>;
 }
 
 interface PropsFromDispatch {
@@ -70,8 +64,11 @@ const Home = (props: Props) => {
         onSubmitEditing={() => props.searchGifs(search)}
         returnKeyType={'search'}
       />
-      {props.gifs.length ? (
-        <FlatList data={props.gifs} renderItem={renderGif} />
+      {props.showGifs ? (
+        <FlatList
+          data={props.terms}
+          renderItem={({ item }) => <HGifPane term={item} />}
+        />
       ) : (
           <FlatList
             data={results}
@@ -94,10 +91,13 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state: IState): PropsFromState => ({
-  gifs: state.images.map(i => i.uri ?? "").filter(uri => uri.length),
+  showGifs: !!state.query,
+  terms: state.alternatives || [],
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<Actions>): PropsFromDispatch => ({
+const mapDispatchToProps = (
+  dispatch: Dispatch<Actions>,
+): PropsFromDispatch => ({
   searchGifs: search =>
     dispatch({ type: ActionTypes.SET_QUERY, payload: { query: search } }),
 });

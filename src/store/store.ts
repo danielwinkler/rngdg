@@ -5,18 +5,21 @@ import { ImageURISource } from 'react-native';
 /// TYPES
 export interface IState {
   query: string;
-  images: Array<ImageURISource>;
+  images: { [term: string]: Array<ImageURISource> };
+  alternatives: Array<string>;
 }
 
 const defaultState: IState = {
   query: '',
-  images: [],
+  images: {},
+  alternatives: [],
 };
 
 /// ACTIONS
 export enum ActionTypes {
   SET_QUERY = 'SET_QUERY',
   SET_IMAGES = 'SET_IMAGES',
+  SET_ALTERNATIVES = 'SET_ALTERNATIVES',
 }
 
 export interface SetQueryAction {
@@ -25,9 +28,13 @@ export interface SetQueryAction {
 }
 export interface SetImagesAction {
   type: typeof ActionTypes.SET_IMAGES;
-  payload: { images: Array<ImageURISource> };
+  payload: { query: string; images: ImageURISource[] };
 }
-export type Actions = SetQueryAction | SetImagesAction;
+export interface SetAlternativesAction {
+  type: typeof ActionTypes.SET_ALTERNATIVES;
+  payload: { alternatives: Array<string> };
+}
+export type Actions = SetQueryAction | SetImagesAction | SetAlternativesAction;
 
 /// REDUCER
 const reducer: Reducer<IState, Actions> = (state = defaultState, action) => {
@@ -36,9 +43,14 @@ const reducer: Reducer<IState, Actions> = (state = defaultState, action) => {
       return { ...state, query: action.payload.query };
     }
     case ActionTypes.SET_IMAGES: {
-      const { images } = action.payload;
-      if (_.isEqual(images, state.images)) return state;
-      return { ...state, images };
+      const { images, query } = action.payload;
+      if (_.isEqual(images, state.images[query])) return state;
+      return { ...state, images: { ...state.images, [query]: images } };
+    }
+    case ActionTypes.SET_ALTERNATIVES: {
+      const { alternatives } = action.payload;
+      if (_.isEqual(alternatives, state.alternatives)) return state;
+      return { ...state, alternatives };
     }
     default:
       return state;

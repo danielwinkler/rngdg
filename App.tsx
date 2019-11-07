@@ -5,9 +5,12 @@ import { createStore, applyMiddleware } from 'redux';
 import { createLogger } from 'redux-logger';
 import Home from './src/components/Home';
 import { Epic, combineEpics, createEpicMiddleware } from 'redux-observable';
-import { loadGifsEpic } from './src/store/epics';
+import { loadGifsEpic, loadAlternativesEpic, loadAlternativeGifsEpic } from './src/store/epics';
 
-export const rootEpic: Epic = combineEpics(loadGifsEpic);
+export const rootEpic: Epic = combineEpics(
+  loadGifsEpic,
+  loadAlternativesEpic,
+  loadAlternativeGifsEpic);
 const epicMiddleware = createEpicMiddleware();
 const middleware = __DEV__
   ? applyMiddleware(createLogger(), epicMiddleware)

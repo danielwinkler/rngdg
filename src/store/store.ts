@@ -45,4 +45,4 @@ const reducer: Reducer<IState, Actions> = (state = defaultState, action) => {
   }
 };
 
-export { reducer as Store };
+export { reducer };

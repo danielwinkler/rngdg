@@ -6,7 +6,9 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "swagger-download": "wget http://central.maven.org/maven2/io/swagger/swagger-codegen-cli/2.4.9/swagger-codegen-cli-2.4.9.jar -O ./external/swagger-codegen-cli.jar",
+    "swagger-codegen": "java -jar ./external/swagger-codegen-cli.jar generate -i ./external/giphyswagger.yml -l typescript-fetch -o ./src/services/api/giphy/"
   },
   "dependencies": {
     "lodash": "^4.17.15",

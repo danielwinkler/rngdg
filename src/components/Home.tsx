@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Component } from 'react';
 import {
   StyleSheet,
   FlatList,
@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Button,
 } from 'react-native';
 import { IState, ActionTypes, Actions } from '../store/store';
 import { connect } from 'react-redux';

@@ -12,7 +12,7 @@
     "swagger-codegen": "java -jar ./external/swagger-codegen-cli.jar generate -i ./external/giphyswagger.yml -l typescript-fetch -o ./src/services/api/giphy/"
   },
   "dependencies": {
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "portable-fetch": "^3.0.0",
     "react": "16.9.0",
     "react-native": "0.61.3",
